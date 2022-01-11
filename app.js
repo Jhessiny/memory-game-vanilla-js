@@ -1,7 +1,6 @@
 class MemoryGame {
   gameBox = document.querySelector(".game__box");
-  image1 = null;
-  image2 = null;
+  curImgs = [];
   images = [
     "/images/cheeseburger.png",
     "/images/fries.png",
@@ -12,7 +11,6 @@ class MemoryGame {
   ];
 
   concatImages = this.images.concat(this.images);
-  randomImagesArray = new Array(12);
   score = 0;
   scoreEl = document.querySelector(".game__score span");
   bindedHandleClick = this.handleClick.bind(this);
@@ -23,21 +21,10 @@ class MemoryGame {
     this.cardsBacks = document.querySelectorAll(".card--back");
   }
 
-  generateRandomImagesArray() {
-    this.concatImages.forEach((img, i) => {
-      let random = Math.floor(Math.random() * 12);
-      if (i === 0) this.randomImagesArray[random] = img;
-      else {
-        while (this.randomImagesArray[random])
-          random = Math.floor(Math.random() * 12);
-        this.randomImagesArray[random] = img;
-      }
-    });
-  }
-
   generateUI() {
-    this.generateRandomImagesArray();
-    this.randomImagesArray.forEach((img) => {
+    this.concatImages.sort(() => 0.5 - Math.random());
+
+    this.concatImages.forEach((img) => {
       const html = `
             <div class="card" data-img="${img}" >
               <img src="${img}"/>
@@ -59,18 +46,19 @@ class MemoryGame {
 
   handleClick(e) {
     const currentCard = e.target;
-    if (this.image1 && this.image2) this.hideCards();
+
+    if (this.curImgs.length === 2) this.hideCards();
     this.showImg(currentCard);
 
-    if (!this.image1) this.image1 = currentCard.closest(".card").dataset.img;
-    else if (!this.image2) {
+    this.curImgs.push(currentCard.closest(".card").dataset.img);
+    if (this.curImgs.length === 2) {
       this.image2 = currentCard.closest(".card").dataset.img;
       this.evaluateImages();
     }
   }
 
   evaluateImages() {
-    if (this.image1 === this.image2) {
+    if (this.curImgs[0] === this.curImgs[1]) {
       this.score += 1;
       this.updateScore();
     } else {
@@ -79,12 +67,11 @@ class MemoryGame {
   }
 
   hideCards() {
-    if (this.image1 === this.image2)
+    if (this.curImgs[0] === this.curImgs[1])
       this.updateClassList("card--back--scored", true);
     this.updateClassList("card--back--invisible");
 
-    this.image1 = null;
-    this.image2 = null;
+    this.curImgs = [];
   }
 
   updateClassList(myClass, scored) {
