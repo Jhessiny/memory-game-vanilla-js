@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.game__box {
+  background-color: #777;
+  width: 600px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.card {
+  position: relative;
+}
+
+.card--back {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-image: url(images/blank.png);
+  display: block;
+}
+
+.card--back--invisible {
+  display: none;
+}
+
+.card--back--scored {
+  background-image: url(images/white.png);
+}
+
+.game__box img {
+  width: 100%;
+  height: 100%;
+}
+
+.game__score {
+  font-size: 30px;
+  color: #fff;
+  margin-bottom: 20px;
+}
