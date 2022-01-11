@@ -27,10 +27,11 @@ class MemoryGame {
     this.concatImages.forEach((img, i) => {
       let random = Math.floor(Math.random() * 12);
       if (i === 0) this.randomImagesArray[random] = img;
-      else
+      else {
         while (this.randomImagesArray[random])
           random = Math.floor(Math.random() * 12);
-      this.randomImagesArray[random] = img;
+        this.randomImagesArray[random] = img;
+      }
     });
   }
 
@@ -58,15 +59,14 @@ class MemoryGame {
 
   handleClick(e) {
     const currentCard = e.target;
-    console.log(currentCard);
     if (this.image1 && this.image2) this.hideCards();
     this.showImg(currentCard);
 
     if (!this.image1) this.image1 = currentCard.closest(".card").dataset.img;
-    else if (!this.image2)
+    else if (!this.image2) {
       this.image2 = currentCard.closest(".card").dataset.img;
-
-    if (this.image1 && this.image2) this.evaluateImages();
+      this.evaluateImages();
+    }
   }
 
   evaluateImages() {
@@ -92,7 +92,6 @@ class MemoryGame {
       if (c.classList.length > 1) {
         if (scored) {
           c.classList.add(myClass);
-          console.log("closest", c.closest(".card"));
           c.closest(".card").removeEventListener(
             "click",
             this.bindedHandleClick
